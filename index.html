@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Romain Christen — Cybersecurity Portfolio</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080c10;
+      --surface:   #0d1117;
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #00e5ff;
+      --accent2:   #7c3aed;
+      --text:      #e2e8f0;
+      --muted:     #64748b;
+      --card-bg:   rgba(255,255,255,0.03);
+      --radius:    14px;
+      --font:      'Inter', system-ui, sans-serif;
+      --mono:      'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Fonts ────────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    /* ── Grid noise overlay ───────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.015) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Nav ──────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      height: 64px;
+      background: rgba(8,12,16,0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--muted); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Hero ─────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 85svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 0 clamp(1.5rem, 8vw, 8rem);
+      padding-top: clamp(5.5rem, 10vw, 8rem);
+      z-index: 1;
+    }
+
+    /* Glow blobs */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      filter: blur(40px);
+    }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 .dim { color: var(--muted); font-weight: 300; }
+
+    .hero-desc {
+      max-width: 520px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--muted); }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat { display: flex; flex-direction: column; }
+
+    .stat-num {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── Section ──────────────────────────────────── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 8vw, 8rem);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    .divider {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin-left: 1rem;
+    }
+
+    /* ── Project Cards ────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      gap: 1.5px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      transition: border-color 0.25s, background 0.25s, transform 0.25s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .project-card:hover {
+      border-color: rgba(0,229,255,0.25);
+      background: rgba(0,229,255,0.03);
+      transform: translateX(4px);
+    }
+
+    .project-card:hover::before { opacity: 1; }
+
+    .project-number {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    .project-title {
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .tag.accent {
+      background: rgba(0,229,255,0.08);
+      border-color: rgba(0,229,255,0.2);
+      color: var(--accent);
+    }
+
+    .tag-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .tag.category {
+      background: rgba(0,229,255,0.12);
+      border-color: rgba(0,229,255,0.4);
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.07em;
+    }
+
+    .tag.sub {
+      background: rgba(0,229,255,0.05);
+      border-color: rgba(0,229,255,0.15);
+      color: rgba(0,229,255,0.7);
+      font-size: 0.63rem;
+    }
+
+    .project-card-aside {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+      flex-shrink: 0;
+    }
+
+    .project-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(0,229,255,0.07);
+      border: 1px solid rgba(0,229,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .project-logos {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.6rem;
+    }
+
+    .project-logo {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+
+    .project-card:hover .project-logo { opacity: 1; }
+
+    /* ── Expandable modules panel ─────────────────── */
+    .project-card.expandable { cursor: pointer; }
+
+    .expand-hint {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      transition: color 0.2s;
+    }
+
+    .expand-hint svg {
+      width: 12px; height: 12px;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+      flex-shrink: 0;
+    }
+
+    .project-card.open .expand-hint svg { transform: rotate(180deg); }
+    .project-card.open .expand-hint { color: var(--accent); }
+
+    .modules-panel {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease, margin-top 0.3s ease;
+      opacity: 0;
+      margin-top: 0;
+    }
+
+    .project-card.open .modules-panel {
+      max-height: 400px;
+      opacity: 1;
+      margin-top: 1.5rem;
+    }
+
+    .module-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .module-item .module-img-wrap {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+
+    .project-card:hover .module-item .module-img-wrap { border-color: rgba(0,229,255,0.2); }
+
+    .module-item img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      display: block;
+    }
+
+    .module-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8,12,16,0.85) 0%, transparent 60%);
+      display: flex;
+      align-items: flex-end;
+      padding: 0.6rem;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .module-item .module-img-wrap:hover .module-overlay { opacity: 1; }
+
+    .module-overlay-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .module-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      .modules-panel { grid-template-columns: repeat(2, 1fr); }
+      .project-card.open .modules-panel { max-height: 700px; }
+    }
+
+    .pdf-panel {
+      grid-column: 1 / -1;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease, margin-top 0.3s ease;
+      opacity: 0;
+      margin-top: 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .project-card.open .pdf-panel {
+      max-height: 520px;
+      opacity: 1;
+      margin-top: 1.5rem;
+    }
+
+    .pdf-panel iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .homemade-badge {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2rem 0.45rem;
+      white-space: nowrap;
+    }
+
+    /* ── About ────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p strong { color: var(--text); font-weight: 500; }
+
+    .skills-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .skill-item::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── Contact ──────────────────────────────────── */
+    .contact-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(2rem, 5vw, 4rem);
+      text-align: center;
+      background: var(--card-bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-box::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .contact-box h3 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-box p {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── Footer ───────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2rem clamp(1.5rem, 8vw, 8rem);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+
+      .project-card {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card-aside {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .hero-stats { gap: 1.5rem; }
+    }
+
+    /* ── Entrance animations ──────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    .fade-up:nth-child(1) { animation-delay: 0.05s; }
+    .fade-up:nth-child(2) { animation-delay: 0.15s; }
+    .fade-up:nth-child(3) { animation-delay: 0.25s; }
+    .fade-up:nth-child(4) { animation-delay: 0.35s; }
+    .fade-up:nth-child(5) { animation-delay: 0.45s; }
+
+    /* ── Intersection observer reveal ────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ──────────────────────────────── -->
+  <nav>
+    <a class="nav-logo" href="#"><span>//</span> romain.christen</a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ────────────────────────────────────── -->
+  <section class="hero" id="home">
+    <div class="hero-tag fade-up">AI &amp; Cybersecurity Consultant</div>
+    <h1 class="fade-up">
+      Romain<br>
+      <span class="dim">Christen</span>
+    </h1>
+    <p class="hero-desc fade-up">
+      Building AI-driven cybersecurity solutions and formations.
+    </p>
+    <div class="hero-cta fade-up">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+    </div>
+
+    <div class="hero-stats fade-up">
+      <div class="stat">
+        <span class="stat-num">AI&nbsp;×&nbsp;Sec</span>
+        <span class="stat-label">Core Focus</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">Digital Forensic&nbsp;/&nbsp;AI&nbsp;/&nbsp;Cybersecurity</span>
+        <span class="stat-label">Domain</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Projects ────────────────────────────────── -->
+  <section id="projects">
+    <div class="section-header reveal">
+      <span class="section-label">01 — Projects</span>
+      <h2>Selected Work</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- Project 1 -->
+      <div class="project-card expandable reveal" id="card-soc">
+        <div class="project-main">
+          <div class="project-number">01 / 06</div>
+          <div class="project-title">AI-Assisted Security Operation Center</div>
+          <p class="project-desc">
+            Working for 1.5 years on the development of an AI-SOC solution for SecuLabs SA, and now responsible for developing AI‑driven security monitoring capabilities.
+          </p>
+          <div class="tag-list" style="flex-direction:column;align-items:flex-start;">
+            <div class="tag-group">
+              <span class="tag accent">AI Cyberattack Detection</span>
+              <span class="tag accent">AI Alert Triage</span>
+              <span class="tag accent">AI Alert Enrichment</span>
+            </div>
+            <div class="tag-group">
+              <span class="tag">Benchmarking</span>
+              <span class="tag">Log Analysis</span>
+              <span class="tag">Opensearch</span>
+              <span class="tag">SIEM</span>
+              <span class="tag">SOC</span>
+              <span class="tag">XDR</span>
+            </div>
+          </div>
+          <div class="expand-hint">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+            View master thesis
+          </div>
+        </div>
+        <div class="project-card-aside">
+          <div class="project-logos">
+            <img src="logo/Seculabs.png" alt="Seculabs" class="project-logo">
+            <img src="logo/selabs.png" alt="SE Labs" class="project-logo">
+          </div>
+        </div>
+        <div class="pdf-panel">
+          <iframe data-src="SOC_AI/Masters-Thesis_Romain-Christen_anonymized.pdf" title="Master Thesis SOC AI"></iframe>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card expandable reveal" id="card-darkweb">
+        <div class="project-main">
+          <div class="project-number">02 / 06</div>
+          <div class="project-title">Darkweb &amp; Clearweb Illicit Credit Cards Intelligence</div>
+          <p class="project-desc">
+            An open-source intelligence study using Selenium-based Darkweb &amp; Clearweb scraping to conduct a market analysis of illicit credit cards.
+          </p>
+          <div class="tag-list">
+            <span class="tag accent">OSINT</span>
+            <span class="tag accent">Scraping</span>
+            <span class="tag">Selenium</span>
+            <span class="tag">Darkweb</span>
+            <span class="tag">Python</span>
+          </div>
+          <div class="expand-hint">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+            View project paper
+          </div>
+        </div>
+        <div class="project-card-aside">
+          <div class="project-logos">
+            <img src="logo/UNIL.png" alt="UNIL" class="project-logo">
+          </div>
+        </div>
+        <div class="pdf-panel">
+          <iframe data-src="osint/OSINT_cartes_bancaires%20illicites.pdf" title="OSINT Report"></iframe>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card expandable reveal" id="card-offensive-ai">
+        <div class="project-main">
+          <div class="project-number">03 / 06</div>
+          <div class="project-title">Offensive AI — State Cyber Defense Training</div>
+          <p class="project-desc">
+            16 hours hands‑on training program on the use of AI in offensive cybersecurity, for state cyber defense sector professionals.
+          </p>
+          <div class="tag-list" style="flex-direction:column;align-items:flex-start;">
+            <div class="tag-group">
+              <span class="tag accent">AI Red Teaming</span>
+              <span class="tag">LLM Safety Bypass</span>
+              <span class="tag">Prompt Injection</span>
+              <span class="tag">Model Poisoning</span>
+              <span class="tag">LLM Backdooring</span>
+              <span class="tag">LLM Jailbreaking</span>
+            </div>
+            <div class="tag-group">
+              <span class="tag accent">AI-augmented Cyberattacks</span>
+              <span class="tag">AI Enhanced Phishing</span>
+              <span class="tag">Offensive AI Agents</span>
+              <span class="tag">Deepfake Creation</span>
+              <span class="tag">Voice Cloning</span>
+            </div>
+          </div>
+          <div class="expand-hint">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+            View formation modules
+          </div>
+        </div>
+        <div class="project-card-aside">
+          <div class="project-logos">
+            <img src="logo/Seculabs.png" alt="Seculabs" class="project-logo">
+            <img src="logo/selabs.png" alt="SE Labs" class="project-logo">
+          </div>
+        </div>
+        <div class="modules-panel">
+          <div class="module-item">
+            <div class="module-img-wrap">
+              <img src="offensive_ai/1.png" data-png="offensive_ai/1.png" data-gif="offensive_ai/1.gif" data-duration="3000" alt="Module 1">
+              <div class="module-overlay"><span class="module-overlay-label">Module 01</span></div>
+            </div>
+            <span class="module-label">Module 01</span>
+          </div>
+          <div class="module-item">
+            <div class="module-img-wrap">
+              <img src="offensive_ai/2.png" data-png="offensive_ai/2.png" data-gif="offensive_ai/2.gif" data-duration="3000" alt="Module 2">
+              <div class="module-overlay"><span class="module-overlay-label">Module 02</span></div>
+            </div>
+            <span class="module-label">Module 02</span>
+          </div>
+          <div class="module-item">
+            <div class="module-img-wrap">
+              <img src="offensive_ai/3.png" data-png="offensive_ai/3.png" data-gif="offensive_ai/3.gif" data-duration="3000" alt="Module 3">
+              <div class="module-overlay"><span class="module-overlay-label">Module 03</span></div>
+            </div>
+            <span class="module-label">Module 03</span>
+          </div>
+          <div class="module-item">
+            <div class="module-img-wrap">
+              <img src="offensive_ai/4.png" data-png="offensive_ai/4.png" data-gif="offensive_ai/4.gif" data-duration="3000" alt="Module 4">
+              <div class="module-overlay"><span class="module-overlay-label">Module 04</span></div>
+            </div>
+            <span class="module-label">Module 04</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 5 -->
+      <div class="project-card expandable reveal" id="card-ai-security">
+        <div class="project-main">
+          <div class="project-number">04 / 06</div>
+          <div class="project-title">Cybersecurity of Large Language Models</div>
+          <p class="project-desc">
+            16 hours training program for the banking sector on the cybersecurity, reliability, and high‑performance deployment of LLMs.
+          </p>
+          <div class="tag-list">
+            <span class="tag accent">LLM Security</span>
+            <span class="tag">OWASP</span>
+            <span class="tag">Fine-Tuning</span>
+            <span class="tag">RAG</span>
+            <span class="tag">Agentic</span>
+            <span class="tag">MCP</span>
+          </div>
+          <div class="expand-hint">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+            View formation modules
+          </div>
+        </div>
+        <div class="project-card-aside">
+          <div class="project-logos">
+            <img src="logo/Seculabs.png" alt="Seculabs" class="project-logo">
+            <img src="logo/selabs.png" alt="SE Labs" class="project-logo">
+          </div>
+        </div>
+        <div class="modules-panel">
+          <div class="module-item">
+            <div class="module-img-wrap">
+              <img src="AI_security/1.png" data-png="AI_security/1.png" data-gif="AI_security/1.gif" data-duration="3000" alt="Module 1">
+              <div class="module-overlay"><span class="module-overlay-label">Module 01</span></div>
+            </div>
+            <span class="module-label">Module 01</span>
+          </div>
+          <div class="module-item">
+            <div class="module-img-wrap">
+              <img src="AI_security/2.png" data-png="AI_security/2.png" data-gif="AI_security/2.gif" data-duration="3000" alt="Module 2">
+              <div class="module-overlay"><span class="module-overlay-label">Module 02</span></div>
+            </div>
+            <span class="module-label">Module 02</span>
+          </div>
+          <div class="module-item">
+            <div class="module-img-wrap">
+              <img src="AI_security/3.png" data-png="AI_security/3.png" data-gif="AI_security/3.gif" data-duration="3000" alt="Module 3">
+              <div class="module-overlay"><span class="module-overlay-label">Module 03</span></div>
+            </div>
+            <span class="module-label">Module 03</span>
+          </div>
+          <div class="module-item">
+            <div class="module-img-wrap">
+              <img src="AI_security/4.png" data-png="AI_security/4.png" data-gif="AI_security/4.gif" data-duration="3000" alt="Module 4">
+              <div class="module-overlay"><span class="module-overlay-label">Module 04</span></div>
+            </div>
+            <span class="module-label">Module 04</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 6 -->
+      <div class="project-card expandable reveal" id="card-garmin">
+        <div class="project-main">
+          <div class="project-number">05 / 06</div>
+          <div class="project-title">Garmin Smartwatch iOS App Automated Forensic artifact extraction</div>
+          <p class="project-desc">
+            Developed an automated forensic tool targeting the Garmin Connect iOS application.
+            Extracts and parses activity, GPS, stress and more data for use in digital investigations.
+          </p>
+          <div class="tag-list">
+            <span class="tag accent">Digital Forensics</span>
+            <span class="tag">IoT Acquisition</span>
+            <span class="tag">Python</span>
+          </div>
+          <div class="expand-hint">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+            View project poster
+          </div>
+        </div>
+        <div class="project-card-aside">
+          <div class="project-logos">
+            <img src="logo/UNIL.png" alt="UNIL" class="project-logo">
+          </div>
+        </div>
+        <div class="pdf-panel">
+          <iframe data-src="garmin/AMSA_GARMIN_POSTER.pdf" title="Garmin Forensics Poster"></iframe>
+        </div>
+      </div>
+
+      <!-- Project 7 -->
+      <div class="project-card expandable reveal" id="card-btc">
+        <div class="project-main">
+          <div class="project-number">06 / 06</div>
+          <div class="project-title">Financial Data Analysis with AI</div>
+          <p class="project-desc">
+            Built an LSTM-based deep learning model to predict Bitcoin prices from
+            time-series data. Developed a real-time visualization dashboard and achieved
+            strong accuracy on both test and live market data.
+          </p>
+          <div class="tag-list">
+            <span class="tag accent">Deep Learning</span>
+            <span class="tag accent">Financial Data Analysis</span>
+            <span class="tag accent">Cryptocurrency</span>
+            <span class="tag">Bitcoin</span>
+            <span class="tag">Time-Series analysis</span>
+            <span class="tag">Python</span>
+          </div>
+          <div class="expand-hint">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+            View forecast report
+          </div>
+        </div>
+        <div class="project-card-aside">
+          <div class="project-logos">
+            <img src="logo/UNIL.png" alt="UNIL" class="project-logo">
+            <span class="homemade-badge">Personal</span>
+          </div>
+        </div>
+        <div class="pdf-panel">
+          <iframe data-src="btc_ml/Daily_AI_BTC_Forecast.pdf" title="BTC Forecast Report"></iframe>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── About ────────────────────────────────────── -->
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-label">02 — About</span>
+      <h2>Background</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          <strong>Cybersecurity &amp; AI Consultant at SecuLabs SA, EPFL Innovation Park</strong>
+        </p>
+        <p>
+          I work across two divisions: <strong>Digital Forensic Incident Response &amp; Monitoring</strong>
+          and <strong>AI</strong>.
+        </p>
+        <p>
+          Specialized in data analysis applied to forensic investigations, cyber threat detection,
+          and AI systems engineering.
+        </p>
+        <p>
+          Holder of a <strong>Master of Science (MSc)</strong> from the University of Lausanne (UNIL)
+          in Forensic Science – Digital Investigation &amp; Identification.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <p style="font-size:0.8rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.25rem;font-family:var(--mono);">
+          Technical Areas
+        </p>
+        <div class="skills-list">
+          <div class="skill-item">AI Cyberattack Detection</div>
+          <div class="skill-item">AI Alert Triage &amp; Enrichment</div>
+          <div class="skill-item">SIEM / SOC / XDR</div>
+          <div class="skill-item">LLM Security</div>
+          <div class="skill-item">Offensive AI</div>
+          <div class="skill-item">OSINT</div>
+          <div class="skill-item">Digital Forensics</div>
+          <div class="skill-item">Machine Learning</div>
+          <div class="skill-item">RAG / Fine-Tuning / Agentic AI</div>
+          <div class="skill-item">Python / Automation</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ──────────────────────────────────── -->
+  <section id="contact">
+    <div class="contact-box reveal">
+      <h3>Let's Work Together</h3>
+      <p>Open to collaborations, consulting engagements, and speaking opportunities.</p>
+      <div class="contact-links">
+        <a href="https://linkedin.com/in/romain-christen-910053297" class="btn btn-ghost" target="_blank" rel="noopener">
+          LinkedIn
+        </a>
+        <a href="mailto:romain00@bluewin.ch" class="btn btn-ghost">
+          Email
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────── -->
+  <footer>
+    <p>© 2026 Romain Christen</p>
+  </footer>
+
+  <!-- ── Scroll reveal ────────────────────────────── -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      }),
+      { threshold: 0.12 }
+    );
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Expandable cards — GIF plays once on open, loops on hover
+    document.querySelectorAll('.project-card.expandable').forEach(card => {
+      const timers = new Map();
+
+      function playOnce(img) {
+        clearTimeout(timers.get(img));
+        img.src = img.dataset.gif + '?t=' + Date.now(); // force restart
+        const dur = parseInt(img.dataset.duration) || 3000;
+        timers.set(img, setTimeout(() => {
+          // only revert if not currently hovered
+          if (!img.closest('.module-img-wrap').matches(':hover')) {
+            img.src = img.dataset.png;
+          }
+        }, dur));
+      }
+
+      function revert(img) {
+        clearTimeout(timers.get(img));
+        img.src = img.dataset.png;
+      }
+
+      // Prevent clicks inside panels from closing the card
+      card.querySelectorAll('.modules-panel, .pdf-panel').forEach(p => {
+        p.addEventListener('click', e => e.stopPropagation());
+      });
+
+      card.addEventListener('click', () => {
+        const opening = !card.classList.contains('open');
+        card.classList.toggle('open');
+        card.querySelectorAll('img[data-gif]').forEach(img => {
+          opening ? playOnce(img) : revert(img);
+        });
+        // Lazy-load PDF iframe
+        const iframe = card.querySelector('iframe[data-src]');
+        if (iframe && opening && !iframe.dataset.loaded) {
+          iframe.src = iframe.dataset.src;
+          iframe.dataset.loaded = '1';
+        }
+      });
+
+      // Per-module hover: play while hovering, revert on leave
+      card.querySelectorAll('.module-img-wrap').forEach(wrap => {
+        const img = wrap.querySelector('img[data-gif]');
+        wrap.addEventListener('mouseenter', () => {
+          if (!card.classList.contains('open')) return;
+          clearTimeout(timers.get(img));
+          img.src = img.dataset.gif + '?t=' + Date.now();
+        });
+        wrap.addEventListener('mouseleave', () => {
+          if (!card.classList.contains('open')) return;
+          revert(img);
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
